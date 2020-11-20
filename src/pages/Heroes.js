@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import HeroeList from "../components/Heroe/HeroeList";
 import MessageWarning from "../components/Messages/MessageWarning";
 import ButtonNewHero from "../components/Button/ButtonNewHero";
@@ -14,11 +14,15 @@ export default () => {
     getDataHeroes();
   }, []);
 
+  let heros = useMemo(async()=>{
+    return await api.heroes.listHeroes();
+  }, []);
+
   let getDataHeroes = async () => {
     setLoading(true);
     setError(null);
     try {
-      const dataHeroes = await api.heroes.listHeroes();
+      const dataHeroes = await heros;
       setLoading(false);
       setHeroes(dataHeroes);
     } catch (err) {
